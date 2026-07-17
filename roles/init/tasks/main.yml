@@ -1,0 +1,17 @@
+- name: Install dependencies
+  ansible.builtin.package:
+    name: podman,firewalld
+    state: present
+
+- name: Start/enable firewalld
+  ansible.builtin.systemd_service:
+    name: firewalld
+    state: started
+    enabled: true
+
+- name: Open firewall for SSH
+  ansible.posix.firewalld:
+    service: ssh
+    permanent: true
+    immediate: true
+    state: enabled

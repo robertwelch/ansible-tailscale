@@ -1,0 +1,7 @@
+- name: Ping Linux
+  ansible.builtin.ping:
+  when: ansible_os_family in ["Debian", "RedHat"]
+
+- name: Ping Windows
+  ansible.windows.win_ping:
+  when: ansible_os_family in ["Windows"]

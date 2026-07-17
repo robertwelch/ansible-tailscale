@@ -1,0 +1,23 @@
+- name: Ping
+  hosts: online
+  tags: [ping]
+  become: true
+  gather_facts: true
+  roles:
+    - ping
+
+- name: Init Linux
+  hosts: linux:&online
+  tags: [init]
+  become: true
+  gather_facts: false
+  roles:
+    - init
+
+- name: Run home assistant
+  hosts: linux:&online:&tag_homeassistant
+  tags: [homeassistant]
+  become: true
+  gather_facts: false
+  roles:
+    - homeassistant
