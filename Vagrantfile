@@ -4,7 +4,7 @@
 require_relative '.vagrant/secrets.rb'
 include Secrets
 
-VM_COUNT = 4
+VM_COUNT = 2
 VM_MEMORY_GB = 2
 VM_CPUS = 2
 
