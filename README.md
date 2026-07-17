@@ -54,4 +54,14 @@ ansible-playbook -i ansible_tailscale_inventory.py main.yml --tags ping
 ansible-playbook -i ansible_tailscale_inventory.py main.yml
 ```
 
+## Home Assistant
+[Home Assistant Documentation](https://www.home-assistant.io/docs/)
+- In order to install home assistant, you have to choose a VM and tag it in Tailscale, then run ansible to configure it.
+- Open Tailscale and create the tag:
+    - Click `Access controls` > `Tags` > `Create tag` and name it `homeassistant`
+- Pick a VM and tag it
+    - Go to `Machines`, click the 3 dots at the end of your client machine and click `Edit ACL tags...` then add the tag you just created
+- Run ansible to configure homeassistant:
+``` shell
+ansible-playbook -i ansible_tailscale_inventory.py main.yml --tags homeassistant
 ```
