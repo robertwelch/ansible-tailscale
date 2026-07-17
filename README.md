@@ -1,4 +1,5 @@
 ## Tailscale
+[Tailscale Documentation](https://tailscale.com/docs)
 - Create Tailscale Telnet: [https://console.tailscale.com/](https://console.tailscale.com/)
 - Click `Add device` > `Linux server`
     - Fill out `Tags`
@@ -12,6 +13,7 @@
 - Also be sure to join this computer, which will act as your ansible controller. to your Tailnet.
 
 ## Vagrant
+[Vagrant Documentation](https://developer.hashicorp.com/vagrant/docs)
 - The `Vagrantfile` is setup to use `VirtualBox`, so make sure [Virtualbox is installed first](https://www.virtualbox.org/wiki/Downloads).
 - Read `Vagrantfile` and update if necessary
     - By default, Vagrant will spin up 2 Rocky10 VMs with 2 GB memory and 2 CPUs. Be sure your computer can handle this before trying to spin them up.
@@ -25,6 +27,7 @@ vagrant destroy -f # -f allows for no-prompt destruction
 ```
 
 ## Ansible
+[Ansible Documentation](https://docs.ansible.com/)
 - Install requirements:
 ``` shell
 ansible-galaxy install -r requirements.yml
