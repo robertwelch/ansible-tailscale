@@ -29,6 +29,11 @@ import subprocess
 import sys
 from typing import Any, TypedDict
 
+
+managed_host_properties = ("OS", "Relay", "PeerRelay", "Tags")
+managed_host_booleans = ("Online", "Active", "ExitNode", "ExitNodeOption", "InNetworkMap", "InMagicSock", "InEngine")
+
+
 ansible_inventory_type = dict[str, dict[str, list[str] | dict[str, Any]]]
 
 
@@ -157,14 +162,6 @@ def assemble_inventory(
         "metadata": {},
         "groups": {
             "all": [],
-            "online": [],
-            "offline": [],
-            "active": [],
-            "exit_node": [],
-            "exit_node_option": [],
-            "in_network_map": [],
-            "in_magic_sock": [],
-            "in_engine": [],
             "self": [tailscale_self_hostname],
         },
     }
@@ -189,70 +186,29 @@ def assemble_inventory(
             **({"ansible_connection": "local"} if host_data["HostName"] == tailscale_self_hostname else {})
         }
 
-        # Hosts that are offline will still be present in the inventory. We set-up these
-        # groups so host patterns can be used to skip offline hosts. We could omit the
-        # offline hosts entirely but there may be use cases where one does want to see
-        # an error if they attempt to connect to an offline host
-        if host_data["Online"]:
-            inventory["groups"]["online"].append(host_data["HostName"])
-        else:
-            inventory["groups"]["offline"].append(host_data["HostName"])
-
-        # If we encounter an OS type we don't have in the inventory yet, we create a
-        # group for it, then we always add each host to the group for that OS
-        if host_data["OS"]:
-            if host_data["OS"] not in inventory["groups"]:
-                inventory["groups"][host_data["OS"]] = []
-            inventory["groups"][host_data["OS"]].append(host_data["HostName"])
-
-        # If we encounter a Relay we don't have in the inventory yet, we create a
-        # group for it, then we always add each host to the group for that Relay
-        if host_data["Relay"]:
-            if host_data["Relay"] not in inventory["groups"]:
-                inventory["groups"][host_data["Relay"]] = []
-            inventory["groups"][host_data["Relay"]].append(host_data["HostName"])
-
-        # If we encounter a PeerRelay we don't have in the inventory yet, we create a
-        # group for it, then we always add each host to the group for that PeerRelay
-        if host_data["PeerRelay"]:
-            if host_data["PeerRelay"] not in inventory["groups"]:
-                inventory["groups"][host_data["PeerRelay"]] = []
-            inventory["groups"][host_data["PeerRelay"]].append(host_data["HostName"])
-
-        if host_data["Active"]:
-            inventory["groups"]["active"].append(host_data["HostName"])
-
-        if host_data["ExitNode"]:
-            inventory["groups"]["exit_node"].append(host_data["HostName"])
-
-        if host_data["ExitNodeOption"]:
-            inventory["groups"]["exit_node_option"].append(host_data["HostName"])
-
-        if host_data["InNetworkMap"]:
-            inventory["groups"]["in_network_map"].append(host_data["HostName"])
-
-        if host_data["InMagicSock"]:
-            inventory["groups"]["in_magic_sock"].append(host_data["HostName"])
-
-        if host_data["InEngine"]:
-            inventory["groups"]["in_engine"].append(host_data["HostName"])
-
-        # if "Capabilities" in host_data:
-        #     for capability in host_data["Capabilities"]:
-        #         if capability:
-        #             if capability not in inventory["groups"]:
-        #                 inventory["groups"][capability] = []
-        #             inventory["groups"][capability].append(host_data["HostName"])
-
-        # We create groups for host tags. Tag names have to be modified to be compatible
-        # with ansible
-        if "Tags" in host_data:
-            for tag in host_data["Tags"]:
-                safe_tag = tag.replace(":", "_").replace("-", "_")
-                if safe_tag in inventory["groups"]:
-                    inventory["groups"][safe_tag].append(host_data["HostName"])
+        # Loop through managed host properties, create group if necessary and append host to group
+        for host_property in managed_host_properties:
+            if host_data[host_property]:
+                if isinstance(host_data[host_property], str):
+                    loop_value = [host_data[host_property]]
+                elif isinstance(host_data[host_property], list):
+                    loop_value = host_data[host_property]
                 else:
-                    inventory["groups"][safe_tag] = [host_data["HostName"]]
+                    loop_value = []
+                for value in loop_value:
+                    safe_value = value.replace(":", "_").replace("-", "_").lower()
+                    if host_property in inventory["groups"]:
+                        inventory["groups"][safe_value].append(host_data["HostName"])
+                    else:
+                        inventory["groups"][safe_value] = [host_data["HostName"]]
+
+        # Loop through managed host booleans and append to group if boolean is truthy
+        for host_boolean in managed_host_booleans:
+            if host_data[host_boolean]:
+                if host_boolean in inventory["groups"]:
+                    inventory["groups"][host_boolean.lower()].append(host_data["HostName"])
+                else:
+                    inventory["groups"][host_boolean.lower()] = [host_data["HostName"]]
 
     return inventory
 
