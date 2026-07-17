@@ -1,5 +1,5 @@
 ## Initialize
-- Create Tailscale Telnet: `https://console.tailscale.com/`
+- Create Tailscale Telnet: [https://console.tailscale.com/](https://console.tailscale.com/)
 - Click `Add device` > `Linux server`
     - Fill out `Tags`
     - Check `Ephemeral`
