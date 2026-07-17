@@ -1,4 +1,4 @@
-## Initialize
+## Initialize Tailscale
 - Create Tailscale Telnet: [https://console.tailscale.com/](https://console.tailscale.com/)
 - Click `Add device` > `Linux server`
     - Fill out `Tags`
@@ -7,4 +7,7 @@
     - Update `Auth key expiration` if necessary
     - Click `Generate install script`
 - Copy `secrets.rb` to `.vagrant/secrets.rb` and update `TAILSCALE_AUTHKEY`
-- Create and provision VMs: `vagrant up`
+    - Anything you put in `./.vagrant/` will NOT be checked into git because `.vagrant` is in `.gitignore`.
+    - Anything you put in `./secrets.rb` WILL be checked into git, so be careful to place your key in the right place.
+- Also be sure to join this computer, which will act as your ansible controller. to your Tailnet.
+
