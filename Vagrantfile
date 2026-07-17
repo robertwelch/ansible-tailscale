@@ -4,10 +4,6 @@
 require_relative '.vagrant/secrets.rb'
 include Secrets
 
-VM_COUNT = 2
-VM_MEMORY_GB = 2
-VM_CPUS = 2
-
 Vagrant.configure("2") do |config|
     (1..VM_COUNT).each do |i|
         ## https://portal.cloud.hashicorp.com/vagrant/discover/cloud-image/rocky-10
