@@ -1,16 +1,28 @@
 ## Tailscale
 [Tailscale Documentation](https://tailscale.com/docs)
 - Create Tailscale Telnet: [https://console.tailscale.com/](https://console.tailscale.com/)
-- Click `Add device` > `Linux server`
+- Join this computer to your tailnet (i.e. `Add device` > `Client device`), it will act as the ansible controller.
+- Tag this device:
+    - Click `Access controls` > `Tags` > `Create tag` and name it `home`
+    - Now go to `Machines`, click the 3 dots at the end of your client machine and click `Edit ACL tags...` then add the tag you just created
+- Get auth key to join the VirtualBox VMs:
+    - Click `Add device` > `Linux server`
     - Fill out `Tags`
+        - Use `tag:workstations` so we can filter for these VMs later when modifying the access controls
     - Check `Ephemeral`
     - Check `Set up authentication key`
-    - Update `Auth key expiration` if necessary
+    - Update `Auth key expiration` if desired
     - Click `Generate install script`
-- Copy `secrets.rb` to `.vagrant/secrets.rb` and update `TAILSCALE_AUTHKEY`
-    - Anything you put in `./.vagrant/` will NOT be checked into git because `.vagrant` is in `.gitignore`.
-    - Anything you put in `./secrets.rb` WILL be checked into git, so be careful to place your key in the right place.
-- Also be sure to join this computer, which will act as your ansible controller. to your Tailnet.
+- Add auth key to secrets file:
+    - Copy `./secrets.rb` to `./.vagrant/secrets.rb` (you may have to create the `./.vagrant` directory) and update `TAILSCALE_AUTHKEY`
+    - NOTE: Anything you put in `./.vagrant/secrets.rb` will NOT be checked into git because `.vagrant` is in `.gitignore`.
+    - NOTE: Anything you put in `./secrets.rb` WILL be checked into git, so be careful to place your key in the right place.
+- Update access controls to allow SSH:
+    - Click `Access controls` > `Tailscale SSH` > `Add rule`
+    - Source: `tag:home`
+    - Destination: `tag:workstations`
+    - As destination user: `autogroup:nonroot` and `root`
+    - Check mode: `Off`
 
 ## Vagrant
 [Vagrant Documentation](https://developer.hashicorp.com/vagrant/docs)
