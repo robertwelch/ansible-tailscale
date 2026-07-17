@@ -45,7 +45,13 @@ vagrant destroy -f # -f allows for no-prompt destruction
 ``` shell
 ansible-galaxy install -r requirements.yml
 ```
-- Run the `main.yml` playbook:
+- Ping hosts using the `main.yml` playbook:
+``` shell
+ansible-playbook -i ansible_tailscale_inventory.py main.yml --tags ping
+```
+- Configure hosts using the `main.yml` playbook:
 ``` shell
 ansible-playbook -i ansible_tailscale_inventory.py main.yml
+```
+
 ```
