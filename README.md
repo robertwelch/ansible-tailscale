@@ -1,3 +1,6 @@
+# ansible-tailscale
+Create and use a Tailscale Tailnet to manage a fleet of devices using ansible.
+
 ## Tailscale
 [Tailscale Documentation](https://tailscale.com/docs)
 - Create Tailscale Telnet: [https://console.tailscale.com/](https://console.tailscale.com/)
