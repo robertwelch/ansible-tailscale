@@ -1,4 +1,4 @@
-## Initialize Tailscale
+## Tailscale
 - Create Tailscale Telnet: [https://console.tailscale.com/](https://console.tailscale.com/)
 - Click `Add device` > `Linux server`
     - Fill out `Tags`
