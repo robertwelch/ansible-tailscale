@@ -68,3 +68,4 @@ ansible-playbook -i ansible_tailscale_inventory.py main.yml
 ``` shell
 ansible-playbook -i ansible_tailscale_inventory.py main.yml --tags homeassistant
 ```
+- When the role finishes, it will show a debug message with the full URL to open `Home Assistant`. This URL utilizes your Tailnet magic DNS and because we opened firewall in the role, you should be able to access it from any device in your Tailnet.
