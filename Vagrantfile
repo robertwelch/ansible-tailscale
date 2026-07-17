@@ -17,7 +17,13 @@ Vagrant.configure("2") do |config|
             end
             rocky10.vm.provision :shell, :privileged => true, path: "Vagrantfile.Provisioner.sh"
             rocky10.vm.provision :shell, :privileged => true, inline: <<-SHELL
-            sudo tailscale up --auth-key=#{TAILSCALE_AUTHKEY} --ssh --force-reauth
+            if [[ -n "#{TAILSCALE_AUTHKEY}" ]]; then
+                curl -fsSL https://tailscale.com/install.sh | sh 2>&1
+                sudo tailscale up --auth-key=#{TAILSCALE_AUTHKEY} --ssh --force-reauth
+            else
+                echo "ERROR: Must provide TAILSCALE_AUTHKEY in ./vagrant/secrets.rb"
+                exit 1
+            fi
             SHELL
         end
     end
