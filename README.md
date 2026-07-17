@@ -24,3 +24,12 @@ vagrant up
 vagrant destroy -f # -f allows for no-prompt destruction
 ```
 
+## Ansible
+- Install requirements:
+``` shell
+ansible-galaxy install -r requirements.yml
+```
+- Run the `main.yml` playbook:
+``` shell
+ansible-playbook -i ansible_tailscale_inventory.py main.yml
+```
