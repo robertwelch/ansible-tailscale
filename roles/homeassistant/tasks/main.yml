@@ -1,3 +1,8 @@
+- name: Create directory
+  ansible.builtin.file:
+    path: "/opt/homeassistant"
+    state: directory
+
 - name: Start home assistant
   containers.podman.podman_container:
     name: homeassistant
