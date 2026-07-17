@@ -197,7 +197,7 @@ def assemble_inventory(
                     loop_value = []
                 for value in loop_value:
                     safe_value = value.replace(":", "_").replace("-", "_").lower()
-                    if host_property in inventory["groups"]:
+                    if safe_value in inventory["groups"]:
                         inventory["groups"][safe_value].append(host_data["HostName"])
                     else:
                         inventory["groups"][safe_value] = [host_data["HostName"]]
@@ -205,10 +205,11 @@ def assemble_inventory(
         # Loop through managed host booleans and append to group if boolean is truthy
         for host_boolean in managed_host_booleans:
             if host_data[host_boolean]:
-                if host_boolean in inventory["groups"]:
-                    inventory["groups"][host_boolean.lower()].append(host_data["HostName"])
+                group_name = host_boolean.lower()
+                if group_name in inventory["groups"]:
+                    inventory["groups"][group_name].append(host_data["HostName"])
                 else:
-                    inventory["groups"][host_boolean.lower()] = [host_data["HostName"]]
+                    inventory["groups"][group_name] = [host_data["HostName"]]
 
     return inventory
 
