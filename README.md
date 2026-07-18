@@ -77,7 +77,10 @@ Create and use a Tailscale Tailnet to manage a fleet of devices using ansible.
 
 ## Vagrant
 [Vagrant Documentation](https://developer.hashicorp.com/vagrant/docs)
-- The `Vagrantfile` is setup to use `VirtualBox`, so make sure [Virtualbox is installed first](https://www.virtualbox.org/wiki/Downloads).
+
+### VirtualBox
+The `Vagrantfile` is setup to use `VirtualBox`, so make sure [Virtualbox is installed first](https://www.virtualbox.org/wiki/Downloads).
+
 - Read `Vagrantfile` and update if necessary
     - By default, Vagrant will spin up 2 Rocky10 VMs with 2 GB memory and 2 CPUs. Be sure your computer can handle this before trying to spin them up.
     - Modify `./.vagrant/secrets.rb` to change the number of VMs, memory or CPUs.
