@@ -98,17 +98,13 @@ vagrant destroy -f # -f allows for no-prompt destruction
 
 ## Ansible
 [Ansible Documentation](https://docs.ansible.com/)
-- Install requirements:
+- Use `run.sh` to create and activate a python3 venv, install requirements.txt, install requirements.yml, run linter, then run main.yml
 ``` shell
-ansible-galaxy install -r requirements.yml
-```
-- Ping hosts using the `main.yml` playbook:
-``` shell
-ansible-playbook -i ansible_tailscale_inventory.py main.yml --tags ping
-```
-- Configure hosts using the `main.yml` playbook:
-``` shell
-ansible-playbook -i ansible_tailscale_inventory.py main.yml
+/bin/bash run.sh
+/bin/bash run.sh --tags ping
+/bin/bash run.sh --tags init
+/bin/bash run.sh --tags storage
+/bin/bash run.sh --tags homeassistant
 ```
 
 ## Home Assistant
