@@ -1,3 +1,5 @@
 .vagrant
 .ssh
+.ansible
 *.vdi
+venv
