@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  roles:
+    - linux_ping
+    - linux_init
+    - linux_storage

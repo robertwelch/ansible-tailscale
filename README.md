@@ -98,12 +98,24 @@ vagrant destroy -f # -f allows for no-prompt destruction
 
 ## Ansible
 [Ansible Documentation](https://docs.ansible.com/)
+
+### Use `ansible.sh`
 - Use `ansible.sh` to create and activate a python3 venv, install requirements.txt, install requirements.yml, run linter, then run main.yml
 ``` shell
+## 1. create and activate a python3 venv, install requirements.txt, install requirements.yml, run linter
 /bin/bash ansible.sh
-/bin/bash ansible.sh --tags ping
-/bin/bash ansible.sh --tags init
-/bin/bash ansible.sh --tags storage
+
+## 2. do everything in example 1 plus run ansible-playbook using the `ansible_tailscale_inventory.py` inventory
+/bin/bash ansible.sh main.yml
+
+## 3. do everything in step 2 except only for tasks tagged with `ping`... View `main.yml` for more tag options.
+/bin/bash ansible.sh main.yml --tags ping
+```
+
+### Test with molecule
+``` shell
+molecule reset
+MOLECULE_DISTRO="rockylinux10" molecule test
 ```
 
 ## Home Assistant
