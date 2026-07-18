@@ -2,9 +2,9 @@ name: Molecule Integration Tests
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   test:
@@ -38,5 +38,5 @@ jobs:
       - name: Run Molecule tests
         run: molecule test
         env:
-          MOLECULE_DISTRO: ${{ matrix.matrix.distro }}
+          MOLECULE_DISTRO: ${{ matrix.distro }}
           ANSIBLE_REMOTE_TMP: /tmp/.ansible/tmp
