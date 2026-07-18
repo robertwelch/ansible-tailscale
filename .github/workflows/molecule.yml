@@ -39,3 +39,4 @@ jobs:
         run: molecule test
         env:
           MOLECULE_DISTRO: ${{ matrix.matrix.distro }}
+          ANSIBLE_REMOTE_TMP: /tmp/.ansible/tmp
