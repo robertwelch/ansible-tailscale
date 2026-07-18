@@ -1,5 +1,5 @@
 - name: Ping
-  hosts: online:&tag_workstations
+  hosts: online:&tag_vagrantvms
   tags: [ping]
   become: true
   gather_facts: true
@@ -7,7 +7,7 @@
     - ping
 
 - name: Init
-  hosts: online:&tag_workstations
+  hosts: online:&tag_vagrantvms
   tags: [init]
   become: true
   gather_facts: false

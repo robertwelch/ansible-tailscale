@@ -14,7 +14,7 @@ Create and use a Tailscale Tailnet to manage a fleet of devices using ansible.
 	"tagOwners": {
 		"tag:admins":        ["autogroup:admin"],
 		"tag:homeassistant": ["autogroup:member"],
-		"tag:workstations":  ["autogroup:member"],
+		"tag:vagrantvms":       ["autogroup:member"],
 		"tag:home":          ["autogroup:member"],
 	},
 ```
@@ -23,7 +23,7 @@ Create and use a Tailscale Tailnet to manage a fleet of devices using ansible.
 	"ssh": [
 		{
 			"src":    ["tag:home"],
-			"dst":    ["tag:workstations"],
+			"dst":    ["tag:vagrantvms"],
 			"users":  ["autogroup:nonroot", "root"],
 			"action": "accept",
 		},
