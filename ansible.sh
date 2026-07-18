@@ -15,15 +15,15 @@ error_handler() {
 trap 'error_handler $LINENO' ERR
 
 if [[ ! -d venv ]]; then
-    echo "Create venv..."
-    stdout=$(python3 -m venv venv 2>&1)
+    echo "Create python virtual environment, .venv..."
+    stdout=$(python3 -m venv .venv 2>&1)
 fi
 
-echo "Sourcing venv..."
-source venv/bin/activate
+echo "Source python virtual environment, .venv..."
+source .venv/bin/activate
 
 echo "Install python requirements..."
-stdout=$(pip install --quiet --requirement requirements.txt 2>&1)
+stdout=$(pip install --requirement requirements.txt 2>&1)
 
 echo "Install ansible requirements..."
 stdout=$(ansible-galaxy install --role-file requirements.yml 2>&1)
@@ -31,5 +31,7 @@ stdout=$(ansible-galaxy install --role-file requirements.yml 2>&1)
 echo "Lint ansible..."
 stdout=$(ansible-lint 2>&1)
 
-echo "Run main.yml$([[ -n "$args" ]] && echo " $args" || true)..."
-ansible-playbook -i ansible_tailscale_inventory.py main.yml $args || true
+if [[ -n "$args" ]]; then
+    echo "Run $([[ -n "$args" ]] && echo " $args" || true)..."
+    ansible-playbook -i ansible_tailscale_inventory.py $args || true
+fi
