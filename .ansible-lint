@@ -1,0 +1,9 @@
+profile: production
+skip_list:
+  - role-name[path]
+  - var-naming[pattern]
+  - var-naming[no-role-prefix]
+  - run-once[play]
+  - yaml[line-length]
+  - command-instead-of-shell
+  - args[module]
