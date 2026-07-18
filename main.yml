@@ -1,23 +1,9 @@
-- name: Ping
-  hosts: online:&tag_vagrantvms
-  tags: [ping]
+- name: Linux Vagrant VMs
+  hosts: linux:&online:&tag_vagrantvms
   become: true
   gather_facts: true
   roles:
-    - ping
-
-- name: Init
-  hosts: online:&tag_vagrantvms
-  tags: [init]
-  become: true
-  gather_facts: false
-  roles:
-    - init
-
-- name: Home Assistant
-  hosts: online:&tag_homeassistant
-  tags: [homeassistant]
-  become: true
-  gather_facts: true
-  roles:
-    - homeassistant
+    - {role: linux_ping, tags: [always, ping]}
+    - {role: linux_init, tags: [init]}
+    - {role: linux_storage, tags: [storage]}
+    - {role: linux_homeassistant, tags: [homeassistant], when: "'tag_homeassistant' in group_names"}
