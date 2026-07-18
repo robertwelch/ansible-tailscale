@@ -104,13 +104,13 @@ vagrant destroy -f # -f allows for no-prompt destruction
 /bin/bash run.sh --tags ping
 /bin/bash run.sh --tags init
 /bin/bash run.sh --tags storage
-/bin/bash run.sh --tags homeassistant
 ```
 
 ## Home Assistant
 [Home Assistant Documentation](https://www.home-assistant.io/docs/)
-- Run ansible to configure homeassistant:
+- In your Tailscale console, pick a VM to be your home assistant and add the `homeassistant` tag.
+- Use `run.sh` with the `homeassistant` tag to configure home assistant on your chosen VM:
 ``` shell
-ansible-playbook -i ansible_tailscale_inventory.py main.yml --tags homeassistant
+/bin/bash run.sh --tags homeassistant
 ```
 - When the role finishes, it will show a debug message with the full URL to open `Home Assistant`. This URL utilizes your Tailnet magic DNS and because we opened firewall in the role, you should be able to access it from any device in your Tailnet.
