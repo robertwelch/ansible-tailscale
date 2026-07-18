@@ -57,14 +57,11 @@ Create and use a Tailscale Tailnet to manage a fleet of devices using ansible.
     - Ephemeral: `Yes`
     - Tags: `N/A`
 
+### Add auth key to secrets file
+- Copy `./secrets.rb` to `./.vagrant/secrets.rb` (you may have to create the `./.vagrant` directory) and update `TAILSCALE_AUTHKEY`
     - NOTE: Anything you put in `./.vagrant/secrets.rb` will NOT be checked into git because `.vagrant` is in `.gitignore`.
     - NOTE: Anything you put in `./secrets.rb` WILL be checked into git, so be careful to place your key in the right place.
-- Update access controls to allow SSH:
-    - Click `Access controls` > `Tailscale SSH` > `Add rule`
-    - Source: `tag:home`
-    - Destination: `tag:workstations`
-    - As destination user: `autogroup:nonroot` and `root`
-    - Check mode: `Off`
+
 
 ## Vagrant
 [Vagrant Documentation](https://developer.hashicorp.com/vagrant/docs)
