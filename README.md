@@ -62,6 +62,18 @@ Create and use a Tailscale Tailnet to manage a fleet of devices using ansible.
     - NOTE: Anything you put in `./.vagrant/secrets.rb` will NOT be checked into git because `.vagrant` is in `.gitignore`.
     - NOTE: Anything you put in `./secrets.rb` WILL be checked into git, so be careful to place your key in the right place.
 
+### Join this computer to your tailnet
+- For Linux:
+    ``` shell
+    curl -fsSL https://tailscale.com/install.sh | sh
+    sudo tailscale up \
+        --reset \
+        --force-reauth \
+        --advertise-exit-node \
+        --ssh \
+        --advertise-tags home
+    ```
+- For other clients, click `Machines` > `Add device` > `Client device` and make sure to tag the device with `home`
 
 ## Vagrant
 [Vagrant Documentation](https://developer.hashicorp.com/vagrant/docs)
