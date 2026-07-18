@@ -6,7 +6,9 @@ timezone="America/Chicago"
 
 majorversion=$(awk -F. '{print $1}' <<< "$(echo "$VERSION_ID")")
 
-dnf --assumeyes remove --oldinstallonly --setopt installonly_limit=2 kernel
+if command -v dnf &>/dev/null; then
+    dnf --assumeyes remove --oldinstallonly --setopt installonly_limit=2 kernel
+fi
 
 if [[ -d /etc/ssh/sshd_config.d ]]; then
     if [[ $(find /etc/ssh/sshd_config.d -type f -name "*.conf" | wc -l) -gt 0 ]]; then
