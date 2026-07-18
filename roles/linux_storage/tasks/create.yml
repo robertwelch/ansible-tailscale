@@ -1,0 +1,71 @@
+- name: Calculate pvs
+  when: this_lvm.disks == "all"
+  block:
+    - name: Find disks
+      ansible.builtin.command: find /dev -type b -not -name sda -not -name '*[0-9]'
+      register: find_disks
+      changed_when: false
+      failed_when: find_disks.stdout_lines | length == 0
+
+    - name: Create Physical Volume and Volume Group
+      community.general.lvg:
+        vg: "{{ this_lvm.vg }}"
+        pvs: "{{ find_disks.stdout_lines }}"
+        state: present
+
+- name: Calculate pvs
+  when: this_lvm.disks != "all"
+  block:
+    - name: Create Physical Volume and Volume Group
+      community.general.lvg:
+        vg: "{{ this_lvm.vg }}"
+        pvs: "{{ this_lvm.disks }}"
+        state: present
+
+- name: Create Logical Volume
+  community.general.lvol:
+    vg: "{{ this_lvm.vg }}"
+    lv: "{{ this_lvm.lv }}"
+    size: "{{ this_lvm.size | default('+100%FREE', true) }}"
+    state: present
+
+- name: Create filesystem on LV
+  community.general.filesystem:
+    fstype: "{{ this_lvm.fs_type | default('ext4', true) }}"
+    resizefs: true
+    dev: "/dev/mapper/{{ this_lvm.vg }}-{{ this_lvm.lv }}"
+
+- name: Find existing mounts
+  ansible.builtin.shell: |
+    set -euo pipefail
+    grep "/dev/mapper/{{ this_lvm.vg }}-{{ this_lvm.lv }}" /etc/fstab | awk '{print $2}' || true
+    findmnt --source "/dev/mapper/{{ this_lvm.vg }}-{{ this_lvm.lv }}" --raw --noheadings | awk '{print $1}' || true
+  register: find_existing_mounts
+  changed_when: false
+
+- name: Remove extraneous mounts
+  ansible.builtin.include_tasks: remove.yml
+  when:
+    - find_existing_mounts.stdout_lines | unique | length > 0
+    - this_mount != this_lvm.mount
+  loop: "{{ find_existing_mounts.stdout_lines | unique }}"
+  loop_control:
+    loop_var: this_mount
+    label: "{{ this_mount }}"
+
+- name: Mount created filesystem
+  ansible.posix.mount:
+    path: "{{ this_lvm.mount }}"
+    src: "/dev/mapper/{{ this_lvm.vg }}-{{ this_lvm.lv }}"
+    fstype: "{{ this_lvm.fs_type | default('ext4', true) }}"
+    opts: "{{ this_lvm.mount_opts | default(omit, true) }}"
+    state: mounted
+
+- name: Find mount
+  ansible.builtin.command: findmnt --raw --noheadings --source "/dev/mapper/{{ this_lvm.vg }}-{{ this_lvm.lv }}"
+  register: findmnt
+  changed_when: false
+
+- name: Show mount
+  ansible.builtin.debug:
+    msg: "{{ findmnt.stdout_lines }}"

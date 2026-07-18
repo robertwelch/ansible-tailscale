@@ -1,6 +1,9 @@
 - name: Create directory
   ansible.builtin.file:
     path: "/opt/homeassistant"
+    owner: "root"
+    group: "root"
+    mode: "0700"
     state: directory
 
 - name: Start home assistant

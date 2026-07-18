@@ -1,0 +1,12 @@
+- name: Ensure lvm2 is installed
+  ansible.builtin.package:
+    name: lvm2
+    state: present
+
+- name: Create
+  ansible.builtin.include_tasks: create.yml
+  when: logical_volumes | length > 0
+  loop: "{{ logical_volumes }}"
+  loop_control:
+    loop_var: this_lvm
+    label: "Create LV: {{ this_lvm.lv }}"
