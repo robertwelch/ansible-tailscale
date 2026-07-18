@@ -49,6 +49,14 @@ Create and use a Tailscale Tailnet to manage a fleet of devices using ansible.
 	],
 ```
 
+### Create ephemeral auth key
+- Click `Settings` > `Keys` > `Generate auth key...`
+    - Description: `vagrant`
+    - Reusable: `Yes`
+    - Expiration: `90 days`
+    - Ephemeral: `Yes`
+    - Tags: `N/A`
+
     - NOTE: Anything you put in `./.vagrant/secrets.rb` will NOT be checked into git because `.vagrant` is in `.gitignore`.
     - NOTE: Anything you put in `./secrets.rb` WILL be checked into git, so be careful to place your key in the right place.
 - Update access controls to allow SSH:
