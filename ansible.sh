@@ -20,7 +20,7 @@ if [[ ! -d venv ]]; then
 fi
 
 echo "Sourcing venv..."
-stdout=$(source venv/bin/activate 2>&1)
+source venv/bin/activate
 
 echo "Install python requirements..."
 stdout=$(pip install --quiet --requirement requirements.txt 2>&1)
