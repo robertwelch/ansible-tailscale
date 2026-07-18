@@ -1,0 +1,10 @@
+logical_volumes:
+  - disks: "all"
+      # - /dev/sdb
+      # - /dev/sdc
+    vg: "data"
+    lv: "data"
+    size: "+100%FREE"
+    fs_type: "ext4"
+    mount: "/data2"
+    mount_opts: "rw,noatime,nodiratime,seclabel,data=ordered"
