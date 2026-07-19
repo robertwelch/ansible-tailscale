@@ -37,5 +37,14 @@ stdout=$(ansible-lint 2>&1)
 
 if [[ -n "$args" ]]; then
     echo "Run $([[ -n "$args" ]] && echo " $args" || true)..."
+    # if ! test -v TAILNET_ID; then
+    #     read -rsp "TAILNET_ID: " TAILNET_ID_input
+    #     export TAILNET_ID="$TAILNET_ID_input"
+    # fi
+    # if ! test -v TAILNET_APIKEY; then
+    #     read -rsp "TAILNET_APIKEY: " TAILNET_APIKEY_input
+    #     export TAILNET_APIKEY="$TAILNET_APIKEY_input"
+    # fi
+    # ansible-playbook -i ansible_tailscale_inventory_api.py $args || true
     ansible-playbook -i ansible_tailscale_inventory.py $args || true
 fi
