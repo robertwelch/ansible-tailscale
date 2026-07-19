@@ -1,11 +1,21 @@
 - name: Calculate pvs
   when: this_lvm.disks == "all"
   block:
-    - name: Find disks
+    - name: Find extra disks
       ansible.builtin.command: find /dev -type b -not -name sda -not -name '*[0-9]'
       register: find_disks
       changed_when: false
-      failed_when: find_disks.stdout_lines | length == 0
+      failed_when: false
+
+    - name: No disks found
+      when: find_disks.stdout_lines | length == 0
+      block:
+        - name: Debug
+          ansible.builtin.debug:
+            msg: "No extra disks found"
+
+        - name: End role
+          meta: end_role
 
     - name: Create Physical Volume and Volume Group
       community.general.lvg:
