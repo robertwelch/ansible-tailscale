@@ -40,9 +40,10 @@ jobs:
           echo "EOF" >> "$GITHUB_OUTPUT"
 
       - name: Verify inventory output contains values
+        env:
+          INVENTORY_JSON: ${{ steps.run_inventory.outputs.inventory }}
         if: env.TAILNET_ID != ''
         run: |
-          INVENTORY_JSON=${{ steps.run_inventory.outputs.inventory }}
           echo "::add-mask::$INVENTORY_JSON" # mask INVENTORY_JSON
           # Verify that the registered output variable is not empty
           if [ -z "$INVENTORY_JSON" ]; then
