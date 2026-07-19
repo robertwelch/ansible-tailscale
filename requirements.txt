@@ -1,5 +1,7 @@
-ansible-core
-ansible-lint
-molecule
-molecule-plugins[podman]
-molecule-plugins[docker]
+## We limit to ansible-core>=2.16.0,<2.17.0 b/c Rocky/RHEL 8 usings Python 3.6 for system python libraries (like dnf and firewalld)
+## but Python 3.6 is deprecated in ansible versions greater than 2.16.
+
+ansible-core>=2.16.0,<2.17.0
+ansible-lint>=24.0.0,<25.0.0
+molecule>=24.0.0,<25.0.0
+molecule-plugins[docker,podman]>=23.0.0,<26.0.0
