@@ -33,7 +33,7 @@ jobs:
         run: |
           # Run the script and write output to a temporary file (discards stdout print)
           python3 ansible_tailscale_inventory_api.py > inventory_output.json
-          
+
           # # Set the file content as a multiline output variable
           # echo "inventory<<EOF" >> "$GITHUB_OUTPUT"
           # cat inventory_output.json >> "$GITHUB_OUTPUT"
@@ -48,7 +48,7 @@ jobs:
             echo "Error: Inventory output is empty."
             exit 1
           fi
-          
+
           # Verify it is valid JSON and contains hosts in the 'all' group
           # (Redirect stdout to /dev/null to ensure secret details are not printed in the logs)
           echo "$INVENTORY_JSON" | jq -e '.all.hosts | length > 0' > /dev/null
@@ -56,5 +56,5 @@ jobs:
             echo "Error: Verification failed. Inventory does not contain any hosts in the 'all' group."
             exit 1
           fi
-          
+
           echo "Success: Inventory verified successfully and contains hosts."
