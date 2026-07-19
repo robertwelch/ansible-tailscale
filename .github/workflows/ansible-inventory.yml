@@ -38,9 +38,11 @@ jobs:
           echo "EOF" >> "$GITHUB_OUTPUT"
 
       - name: Verify inventory output contains values
-        if: env.TAILNET_ID != ''
         env:
+          TAILNET_ID: ${{ secrets.TAILNET_ID }}
+          TAILNET_APIKEY: ${{ secrets.TAILNET_APIKEY }}
           INVENTORY_JSON: ${{ steps.run_inventory.outputs.inventory }}
+        if: env.TAILNET_ID != ''
         run: |
           # Verify that the registered output variable is not empty
           if [ -z "$INVENTORY_JSON" ]; then
