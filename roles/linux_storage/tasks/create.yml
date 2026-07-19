@@ -15,7 +15,7 @@
             msg: "No extra disks found"
 
         - name: End role
-          meta: end_role
+          ansible.builtin.meta: end_role
 
     - name: Create Physical Volume and Volume Group
       community.general.lvg:
