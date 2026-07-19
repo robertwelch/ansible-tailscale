@@ -1,5 +1,20 @@
 # ansible-tailscale
-Create and use a Tailscale Tailnet to manage a fleet of devices using ansible.
+
+An automation template and framework to model, provision, and securely orchestrate a fleet of Linux devices using **Ansible** and **Tailscale** within a **Vagrant**-managed virtual environment.
+
+This project demonstrates how to build a zero-config, secure administrative network (Tailnet) to run Ansible playbooks against remote hosts dynamically, using Tailscale's MagicDNS and tags instead of maintaining static SSH configurations or IP addresses.
+
+### Key Capabilities
+
+- **Automated Virtual Environment**: Quickly spins up a multi-node Rocky Linux environment on VirtualBox using [Vagrant](file:///home/rlw0289/Documents/git/ansible-tailscale/Vagrantfile).
+- **Dynamic Tailscale Registration**: Automatically joins newly provisioned nodes to your Tailscale network (Tailnet) during bootstrapping.
+- **Dynamic Ansible Inventory**: Uses a custom Python script ([ansible_tailscale_inventory.py](file:///home/rlw0289/Documents/git/ansible-tailscale/ansible_tailscale_inventory.py)) that queries the local Tailscale client status to automatically discover and group active nodes by OS, tags, and online state.
+- **Secure Provisioning**: Runs Ansible playbooks directly over encrypted Tailscale tunnels using Tailscale SSH, avoiding the need for manual SSH key management.
+- **Pre-configured Ansible Roles**:
+  - `linux_ping`: For connectivity checks.
+  - `linux_init`: Installs base utilities (Podman, Firewalld) and configures security rules.
+  - `linux_storage`: Configures LVM (Logical Volume Management) dynamically.
+  - `linux_homeassistant`: Installs and exposes Home Assistant inside a Podman container, securely reachable via Tailnet MagicDNS.
 
 ## Tailscale
 [Tailscale Documentation](https://tailscale.com/docs)
@@ -78,8 +93,72 @@ Create and use a Tailscale Tailnet to manage a fleet of devices using ansible.
 ## Vagrant
 [Vagrant Documentation](https://developer.hashicorp.com/vagrant/docs)
 
-### VirtualBox
-The `Vagrantfile` is setup to use `VirtualBox`, so make sure [Virtualbox is installed first](https://www.virtualbox.org/wiki/Downloads).
+### Installing VirtualBox & Vagrant
+
+Before starting, you must install VirtualBox and Vagrant on your machine.
+
+#### Install VirtualBox
+The `Vagrantfile` is set up to use `VirtualBox`.
+
+- **Ubuntu/Debian**:
+  ```shell
+  sudo apt update
+  sudo apt install -y virtualbox virtualbox-ext-pack
+  ```
+- **Fedora**:
+  ```shell
+  sudo dnf install -y VirtualBox akmods
+  sudo akmods
+  sudo systemctl restart vboxdrv
+  ```
+- **macOS**:
+  - Intel Macs:
+    ```shell
+    brew install --cask virtualbox
+    ```
+  - Apple Silicon (M1/M2/M3): VirtualBox support is in Developer Preview and may not be stable. You may need to adapt the `Vagrantfile` for alternative providers.
+- **Windows**:
+  ```powershell
+  winget install Oracle.VirtualBox
+  ```
+  Or download from the [VirtualBox Downloads Page](https://www.virtualbox.org/wiki/Downloads).
+
+#### Install Vagrant
+Vagrant orchestrates the creation and provisioning of the VMs.
+
+- **Ubuntu/Debian**:
+  ```shell
+  sudo apt update && sudo apt install -y wget gpg
+  wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(grep -oP '(?<=UBUNTU_CODENAME=).*' /etc/os-release || lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+  sudo apt update && sudo apt install -y vagrant
+  ```
+- **Fedora**:
+  ```shell
+  wget -O- https://rpm.releases.hashicorp.com/fedora/hashicorp.repo | sudo tee /etc/yum.repos.d/hashicorp.repo
+  sudo dnf -y install vagrant
+  ```
+- **RHEL/CentOS/Rocky Linux**:
+  ```shell
+  sudo yum install -y yum-utils
+  sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
+  sudo yum -y install vagrant
+  ```
+- **macOS**:
+  ```shell
+  brew tap hashicorp/tap
+  brew install hashicorp/tap/hashicorp-vagrant
+  ```
+- **Windows**:
+  ```powershell
+  winget install HashiCorp.Vagrant
+  ```
+  Or download from the [Vagrant Downloads Page](https://developer.hashicorp.com/vagrant/install).
+
+Verify the installation by running:
+```shell
+vagrant --version
+```
 
 ### Vagrantfile
 - Read `Vagrantfile` and update if necessary
