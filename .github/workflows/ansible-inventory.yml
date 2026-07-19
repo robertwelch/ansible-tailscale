@@ -34,16 +34,15 @@ jobs:
           # Run the script and write output to a temporary file (discards stdout print)
           python3 ansible_tailscale_inventory_api.py > inventory_output.json
           
-          # Set the file content as a multiline output variable
-          echo "inventory<<EOF" >> "$GITHUB_OUTPUT"
-          cat inventory_output.json >> "$GITHUB_OUTPUT"
-          echo "EOF" >> "$GITHUB_OUTPUT"
+          # # Set the file content as a multiline output variable
+          # echo "inventory<<EOF" >> "$GITHUB_OUTPUT"
+          # cat inventory_output.json >> "$GITHUB_OUTPUT"
+          # echo "EOF" >> "$GITHUB_OUTPUT"
 
       - name: Verify inventory output contains values
-        env:
-          INVENTORY_JSON: ${{ steps.run_inventory.outputs.inventory }}
         if: env.TAILNET_ID != ''
         run: |
+          INVENTORY_JSON=$(cat inventory_output.json)
           echo "::add-mask::$INVENTORY_JSON" # mask INVENTORY_JSON
           # Verify that the registered output variable is not empty
           if [ -z "$INVENTORY_JSON" ]; then
