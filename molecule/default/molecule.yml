@@ -6,8 +6,22 @@ driver:
   name: podman
 
 platforms:
-  - name: instance
-    image: "geerlingguy/docker-${MOLECULE_DISTRO:-rockylinux10}-ansible:latest"
+  - name: rocky8
+    image: "geerlingguy/docker-rockylinux8-ansible:latest"
+    command: ""
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    privileged: true
+    pre_build_image: true
+  - name: rocky9
+    image: "geerlingguy/docker-rockylinux9-ansible:latest"
+    command: ""
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    privileged: true
+    pre_build_image: true
+  - name: rocky10
+    image: "geerlingguy/docker-rockylinux10-ansible:latest"
     command: ""
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
