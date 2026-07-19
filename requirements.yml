@@ -1,6 +1,5 @@
 collections:
   - community.general
   - containers.podman
-  - containers.docker
   - ansible.windows
   - ansible.posix
