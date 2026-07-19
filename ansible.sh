@@ -14,8 +14,12 @@ error_handler() {
 
 trap 'error_handler $LINENO' ERR
 
-if [[ ! -d venv ]]; then
+if [[ ! -d .venv ]]; then
     echo "Create python virtual environment, .venv..."
+    stdout=$(python3 -m venv .venv 2>&1)
+elif [[ -d .venv && -z "$args" ]]; then
+    echo "Rebuilding python virtual environment, .venv..."
+    rm -rf .venv
     stdout=$(python3 -m venv .venv 2>&1)
 fi
 
