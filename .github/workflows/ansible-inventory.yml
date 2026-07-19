@@ -1,0 +1,29 @@
+name: Calculate ansible inventory from python script
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  ansible-inventory:
+    name: Calculate ansible inventory
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run python script
+        env:
+          TAILNET_ID: ${{ secrets.TAILNET_ID }}
+          TAILNET_APIKEY: ${{ secrets.TAILNET_APIKEY }}
+        if: env.TAILNET_ID != ''
+        run: python3 ansible_tailscale_inventory_api.py
