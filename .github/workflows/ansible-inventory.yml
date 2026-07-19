@@ -13,20 +13,22 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
+    env:
+      TAILNET_ID: ${{ secrets.TAILNET_ID }}
+      TAILNET_APIKEY: ${{ secrets.TAILNET_APIKEY }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        if: env.TAILNET_ID != ''
 
       - name: Set up Python
         uses: actions/setup-python@v5
+        if: env.TAILNET_ID != ''
         with:
           python-version: '3.12'
 
       - name: Run python script, but don't display output
         id: run_inventory
-        env:
-          TAILNET_ID: ${{ secrets.TAILNET_ID }}
-          TAILNET_APIKEY: ${{ secrets.TAILNET_APIKEY }}
         if: env.TAILNET_ID != ''
         run: |
           # Run the script and write output to a temporary file (discards stdout print)
@@ -38,12 +40,10 @@ jobs:
           echo "EOF" >> "$GITHUB_OUTPUT"
 
       - name: Verify inventory output contains values
-        env:
-          TAILNET_ID: ${{ secrets.TAILNET_ID }}
-          TAILNET_APIKEY: ${{ secrets.TAILNET_APIKEY }}
-          INVENTORY_JSON: ${{ steps.run_inventory.outputs.inventory }}
         if: env.TAILNET_ID != ''
         run: |
+          INVENTORY_JSON=${{ steps.run_inventory.outputs.inventory }}
+          echo "::add-mask::$INVENTORY_JSON" # mask INVENTORY_JSON
           # Verify that the registered output variable is not empty
           if [ -z "$INVENTORY_JSON" ]; then
             echo "Error: Inventory output is empty."
