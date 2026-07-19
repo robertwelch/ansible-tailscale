@@ -2,6 +2,7 @@
 - name: Converge
   hosts: all
   become: true  # Forces execution as root inside the container
+  become_method: ansible.builtin.su
   roles:
     - linux_ping
     - linux_init
