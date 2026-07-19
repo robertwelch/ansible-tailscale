@@ -43,7 +43,6 @@ jobs:
         if: env.TAILNET_ID != ''
         run: |
           INVENTORY_JSON=$(cat inventory_output.json)
-          echo "::add-mask::$INVENTORY_JSON" # mask INVENTORY_JSON
           # Verify that the registered output variable is not empty
           if [ -z "$INVENTORY_JSON" ]; then
             echo "Error: Inventory output is empty."
