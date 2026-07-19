@@ -3,3 +3,4 @@
 .ansible
 .venv
 *.vdi
+__pycache__
