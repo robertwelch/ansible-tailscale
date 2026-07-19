@@ -1,9 +1,21 @@
-- name: Linux Vagrant VMs
-  hosts: linux:&online:&tag_vagrantvms
+- name: Linux Online VMs
+  hosts: linux:&online
   become: true
   gather_facts: true
   roles:
     - {role: linux_ping, tags: [always, ping]}
+
+- name: Linux Online non-self VMs
+  hosts: linux:&online:!self # linux:&online:&tag_vagrantvms
+  become: true
+  gather_facts: false
+  roles:
     - {role: linux_init, tags: [init]}
     - {role: linux_storage, tags: [storage]}
-    - {role: linux_homeassistant, tags: [homeassistant], when: "'tag_homeassistant' in group_names"}
+
+- name: Linux Home Assistant VMs
+  hosts: linux:&online:&tag_homeassistant
+  become: true
+  gather_facts: false
+  roles:
+    - {role: linux_homeassistant, tags: [homeassistant]}
