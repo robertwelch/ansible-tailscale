@@ -6,5 +6,5 @@ logical_volumes:
     lv: "data"
     size: "+100%FREE"
     fs_type: "ext4"
-    mount: "/data2"
+    mount: "/data"
     mount_opts: "rw,noatime,nodiratime,seclabel,data=ordered"
