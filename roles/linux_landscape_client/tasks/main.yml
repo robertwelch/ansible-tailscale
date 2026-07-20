@@ -1,0 +1,29 @@
+# - name: Update
+#   ansible.builtin.package:
+#     name: "*"
+#     state: latest
+
+- name: Install landscape-client
+  ansible.builtin.package:
+    name: landscape-client
+    state: present
+
+- name: Debug
+  ansible.builtin.debug:
+    msg: "Register to {{ hostvars['vagrantvm-1'].ansible_host }}..."
+
+- name: Register
+  ansible.builtin.shell: |
+    set -euo pipefail
+    openssl s_client -showcerts -connect {{ hostvars['vagrantvm-1'].ansible_host }}:443 </dev/null 2>/dev/null | openssl x509 -outform PEM > /etc/landscape/landscape_server.pem
+    sudo landscape-config \
+      --silent \
+      --register-if-needed \
+      --ssl-public-key /etc/landscape/landscape_server.pem \
+      --computer-title "{{ inventory_hostname }}" \
+      --account-name standalone  \
+      --url https://{{ hostvars['vagrantvm-1'].ansible_host }}/message-system \
+      --ping-url http://{{ hostvars['vagrantvm-1'].ansible_host }}/ping
+  args:
+    executable: /bin/bash
+  changed_when: true

@@ -1,0 +1,76 @@
+- name: Generate certs using tailscale
+  ansible.builtin.shell: |
+    set -euo pipefail
+    tailscale cert --cert-file /etc/ssl/certs/landscape_server.pem --key-file /etc/ssl/private/landscape_server.key "{{ ansible_host }}"
+  args:
+    executable: /bin/bash
+  changed_when: true
+
+# - name: Update
+#   ansible.builtin.package:
+#     name: "*"
+#     state: latest
+
+- name: Install required repository utilities
+  ansible.builtin.package:
+    name: software-properties-common,ca-certificates
+    state: present
+
+- name: Check the quickstart stack
+  ansible.builtin.shell: |
+    set -euo pipefail
+    apt search "landscape-server-quickstart" | grep "[installed]"
+  args:
+    executable: /bin/bash
+  register: check_quickstart
+  failed_when: false
+  changed_when: false
+
+- name: Debug
+  ansible.builtin.debug:
+    msg: "Reconfigure the quickstart stack"
+  when: check_quickstart.rc == 0
+
+- name: Reconfigure the quickstart stack
+  ansible.builtin.shell: |
+    set -euo pipefail
+    sudo dpkg-reconfigure landscape-server-quickstart
+    lsctl restart
+  args:
+    executable: /bin/bash
+  when: check_quickstart.rc == 0
+  changed_when: true
+
+- name: Debug
+  ansible.builtin.debug:
+    msg: "Install the quickstart stack"
+  when: check_quickstart.rc == 1
+
+- name: Install the quickstart stack
+  ansible.builtin.package:
+    name: landscape-server-quickstart
+    state: present
+  # ansible.builtin.shell: |
+  #   sudo DEBIAN_FRONTEND=noninteractive apt-get install -y landscape-server-quickstart
+  when: check_quickstart.rc != 0
+
+- name: Open firewall for https
+  ansible.builtin.shell: |
+    set -euo pipefail
+    if systemctl is-active ufw.service &>/dev/null; then
+      echo "Update ufw..."
+      sudo ufw allow https
+    elif systemctl is-active firewalld.service &>/dev/null; then
+      echo "Update firewalld..."
+      sudo firewall-cmd --permanent --add-service https
+      sudo firewall-cmd --reload
+    else
+      echo "Do nothing"
+    fi
+  args:
+    executable: /bin/bash
+  changed_when: true
+
+- name: Result
+  ansible.builtin.debug:
+    msg: "https://{{ ansible_host }}"

@@ -19,3 +19,17 @@
   gather_facts: false
   roles:
     - {role: linux_homeassistant, tags: [homeassistant]}
+
+# - name: Linux Landscape Server
+#   hosts: vagrantvm-1 # linux:&online:&tag_landscape_server
+#   become: true
+#   gather_facts: false
+#   roles:
+#     - {role: linux_landscape_server, tags: [landscape_server, landscape]}
+
+# - name: Linux Landscape Clients
+#   hosts: vagrantvm-2 # linux:&online:&tag_landscape_client
+#   become: true
+#   gather_facts: false
+#   roles:
+#     - {role: linux_landscape_client, tags: [landscape_client, landscape]}
