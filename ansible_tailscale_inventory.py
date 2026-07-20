@@ -179,9 +179,11 @@ def assemble_inventory(
         # We add each host to the list of all hosts
         inventory["groups"]["all"].append(host_data["HostName"])
 
+        DNSName = host_data["DNSName"].rstrip(".")
+
         # Set host's inventory metadata
         inventory["metadata"][host_data["HostName"]] = {
-            "ansible_host": host_data["DNSName"],
+            "ansible_host": DNSName,
             "tailscale_ips": host_data["TailscaleIPs"],
             **({"ansible_connection": "local"} if host_data["HostName"] == tailscale_self_hostname else {})
         }
