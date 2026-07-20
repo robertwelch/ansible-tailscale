@@ -15,7 +15,6 @@ Vagrant.configure("2") do |config|
     config.vm.provision :shell, :privileged => true, path: "Vagrantfile.Tailscale.sh", args: "#{TAILSCALE_AUTHKEY}"
 
     (1..VM_COUNT).each do |vmnum|
-        ## https://portal.cloud.hashicorp.com/vagrant/discover/cloud-image/rocky-10
         config.vm.define "vagrantvm-#{vmnum}" do |vagrantvm|
             vagrantvm.vm.box = VM_BOX
             vagrantvm.vm.hostname = "vagrantvm-#{vmnum}"

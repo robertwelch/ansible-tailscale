@@ -1,5 +1,6 @@
 module Secrets
   TAILSCALE_AUTHKEY = ""
+  ## Options from `cloud-image`: https://portal.cloud.hashicorp.com/vagrant/discover/cloud-image/
   VM_BOX = "cloud-image/rocky-10"
   VM_COUNT = 2
   VM_MEMORY_GB = 2
