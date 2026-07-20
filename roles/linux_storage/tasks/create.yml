@@ -14,8 +14,8 @@
           ansible.builtin.debug:
             msg: "No extra disks found"
 
-        - name: End role
-          ansible.builtin.meta: end_role
+        # - name: End role
+        #   ansible.builtin.meta: end_role
 
     - name: Create Physical Volume and Volume Group
       community.general.lvg:
