@@ -194,7 +194,7 @@ vagrant destroy -f # -f allows for no-prompt destruction
 ### Test with molecule
 ``` shell
 molecule reset
-MOLECULE_DISTRO="rockylinux10" molecule test
+molecule test
 ```
 
 ## Home Assistant
